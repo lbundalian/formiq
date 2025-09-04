@@ -19,6 +19,9 @@ def build_env(env_cfg: Dict[str, Any]):
     """If 'env_module' provided, call build_env(**env_cfg); else return env_cfg."""
     module_name = env_cfg.get("env_module")
     if module_name:
+        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if parent_dir not in sys.path:
+            sys.path.insert(0, parent_dir)
         mod = importlib.import_module(module_name)
         func = getattr(mod, "build_env")
         kwargs = {k:v for k,v in env_cfg.items() if k != "env_module"}
@@ -28,6 +31,9 @@ def build_env(env_cfg: Dict[str, Any]):
 def cmd_run(args):
     cfg, env_cfg, params, _ = load_config(args.config)
     for m in cfg.get("modules", []):
+        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if parent_dir not in sys.path:
+            sys.path.insert(0, parent_dir)
         importlib.import_module(m)
 
     if args.targets:
@@ -64,6 +70,9 @@ def cmd_list(args):
     if args.config and pathlib.Path(args.config).exists():
         cfg, _, _, _ = load_config(args.config)
         for m in cfg.get("modules", []):
+            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if parent_dir not in sys.path:
+                sys.path.insert(0, parent_dir)            
             importlib.import_module(m)
     nodes = list_nodes()
     print("# Tasks"); [print("-", n) for n in sorted(nodes["tasks"])]

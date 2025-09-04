@@ -1,0 +1,26 @@
+# examples/formiq.yml
+project: formiq_example
+profile: ${FORMIQ_PROFILE:-dev}
+
+envs:
+  dev:
+    env_module: examples.sqlalchemy_env
+    db_url: ${DB_URL:-}
+    resources: { max_workers: 8 }
+  prod:
+    env_module: examples.sqlalchemy_env
+    db_url: ${DB_URL}
+    resources: { max_workers: 16 }
+
+params:
+  # choose one data source:
+  # table_name: orders           # if using DB reflection
+  # csv_path: ./data/orders.csv  # if using CSV
+  required_columns: ["id"]
+  group_key: id
+
+targets:
+  daily: [build_dataset, summarize, qc_basic, recap]
+
+modules:
+  - examples.rules_anything
