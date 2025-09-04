@@ -1,0 +1,80 @@
+<svg width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">FormiQ worker ant icon</title>
+  <desc id="desc">A cute minimalist worker ant wearing a helmet and carrying a small cube, with a dotted trail to imply a data pipeline queue.</desc>
+  <defs>
+    <style>
+      :root { --ink:#1f2937; --accent:#22c55e; --inkSoft:#64748b; }
+      .ink { fill: var(--ink); }
+      .accent { fill: var(--accent); }
+      .stroke-ink { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stroke-soft { stroke: var(--inkSoft); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    </style>
+    <!-- Soft shadow -->
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Dotted trail (pipeline checkpoints) -->
+  <path d="M24 196c28-20 46-12 74-26s32-42 68-46 62 18 66 36"
+        stroke="var(--inkSoft)" stroke-width="6" stroke-dasharray="0 18" stroke-linecap="round" fill="none"/>
+
+  <!-- Ground shadow -->
+  <ellipse cx="132" cy="196" rx="64" ry="10" fill="#000" opacity="0.08"/>
+
+  <!-- Ant group -->
+  <g filter="url(#softShadow)">
+    <!-- Abdomen -->
+    <ellipse class="ink" cx="164" cy="148" rx="34" ry="26"/>
+    <!-- Thorax -->
+    <circle class="ink" cx="126" cy="140" r="22"/>
+    <!-- Head -->
+    <circle class="ink" cx="98" cy="124" r="18"/>
+
+    <!-- Hard hat (worker vibe) -->
+    <g transform="translate(80,102)">
+      <!-- Helmet bowl -->
+      <path class="accent" d="M0,18c2-12,12-20,26-20s24,8,26,20v2H0z"/>
+      <!-- Brim -->
+      <rect class="accent" x="-2" y="18" width="58" height="6" rx="3"/>
+      <!-- Strap -->
+      <rect x="2" y="26" width="46" height="3" rx="1.5" fill="white" opacity="0.6"/>
+    </g>
+
+    <!-- Eyes -->
+    <circle cx="92" cy="124" r="4.5" fill="#fff"/>
+    <circle cx="104" cy="124" r="4.5" fill="#fff"/>
+    <circle cx="93.5" cy="124" r="2" fill="var(--ink)"/>
+    <circle cx="105.5" cy="124" r="2" fill="var(--ink)"/>
+
+    <!-- Antennae -->
+    <path class="stroke-ink" d="M90 112c-8-10-18-14-26-10"/>
+    <path class="stroke-ink" d="M106 110c8-10 18-14 26-10"/>
+
+    <!-- Legs -->
+    <path class="stroke-ink" d="M114 154l-18 18"/>
+    <path class="stroke-ink" d="M128 158l-4 24"/>
+    <path class="stroke-ink" d="M142 154l16 20"/>
+
+    <!-- Mandible line (cute smile) -->
+    <path class="stroke-ink" d="M94 132c4 4 8 4 12 0"/>
+
+    <!-- Data cube being carried -->
+    <g transform="translate(156,108) rotate(12)">
+      <!-- Back faces -->
+      <polygon points="0,18 18,8 36,18 18,28" fill="#16a34a"/>
+      <polygon points="18,8 36,18 36,36 18,26" fill="#0f9a43"/>
+      <polygon points="0,18 18,8 18,26 0,36" fill="#17b24f"/>
+      <!-- Front highlight edges -->
+      <polyline points="0,18 18,8 36,18 18,28 0,18" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Little carrying arm -->
+    <path class="stroke-ink" d="M142 132c6 0 10 6 14 10"/>
+  </g>
+
+  <!-- Optional tiny badge "Q" loop suggestion (queue motif) -->
+  <path d="M190 168c0-10 8-18 18-18s18 8 18 18-8 18-18 18-18-8-18-18z" fill="none" stroke="var(--accent)" stroke-width="6"/>
+  <path d="M219 189l8 8" class="stroke-soft"/>
+
+</svg>

@@ -1,0 +1,24 @@
+[project]
+name = "formiq"
+version = "0.1.0"
+description = "Formiq: a minimal, configurable workflow & data-quality framework"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML>=6.0",
+]
+
+# Optional extras so users can choose features
+[project.optional-dependencies]
+pandas = ["pandas>=2.0"]
+db = ["SQLAlchemy>=2.0"]
+
+[project.scripts]
+formiq = "formiq.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
