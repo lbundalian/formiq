@@ -1,6 +1,6 @@
 [project]
 name = "formiq"
-version = "0.1.0"
+version = "0.1.2"
 description = "Formiq: a minimal, configurable workflow & data-quality framework"
 readme = "README.md"
 requires-python = ">=3.10"
