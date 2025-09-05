@@ -1,4 +1,4 @@
-# README placeholder
+# README
 # Formiq
 
 A tiny, Snakemake/Nextflow-style framework for building **Python-first** DAGs with **data quality checks**.
