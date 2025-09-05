@@ -1,9 +1,17 @@
 # formiq/cli.py
 from __future__ import annotations
-import argparse, importlib, json, os, sys, textwrap, pathlib
+import argparse, importlib, importlib.util, json, os, sys, textwrap, pathlib
 from typing import Any, Dict
 import yaml
 from .core import Runner, list_nodes
+
+def import_module_from_path(module_name, module_path):
+    """Dynamically import a module from a path"""
+    spec = importlib.util.spec_from_file_location(module_name, module_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 def load_config(path: str = "formiq.yml"):
     with open(path, "r", encoding="utf-8") as f:
@@ -19,10 +27,17 @@ def build_env(env_cfg: Dict[str, Any]):
     """If 'env_module' provided, call build_env(**env_cfg); else return env_cfg."""
     module_name = env_cfg.get("env_module")
     if module_name:
-        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        if parent_dir not in sys.path:
-            sys.path.insert(0, parent_dir)
-        mod = importlib.import_module(module_name)
+        # Convert module name to file path (e.g., "examples.sqlalchemy_env" -> "examples/sqlalchemy_env.py")
+        module_path = module_name.replace(".", "/") + ".py"
+        if os.path.exists(module_path):
+            mod = import_module_from_path(module_name, module_path)
+        else:
+            # Fallback to standard import if file doesn't exist
+            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if parent_dir not in sys.path:
+                sys.path.insert(0, parent_dir)
+            mod = importlib.import_module(module_name)
+        
         func = getattr(mod, "build_env")
         kwargs = {k:v for k,v in env_cfg.items() if k != "env_module"}
         return func(**kwargs)
@@ -31,10 +46,16 @@ def build_env(env_cfg: Dict[str, Any]):
 def cmd_run(args):
     cfg, env_cfg, params, _ = load_config(args.config)
     for m in cfg.get("modules", []):
-        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        if parent_dir not in sys.path:
-            sys.path.insert(0, parent_dir)
-        importlib.import_module(m)
+        # Convert module name to file path (e.g., "examples.rules_anything" -> "examples/rules_anything.py")
+        module_path = m.replace(".", "/") + ".py"
+        if os.path.exists(module_path):
+            import_module_from_path(m, module_path)
+        else:
+            # Fallback to standard import if file doesn't exist
+            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if parent_dir not in sys.path:
+                sys.path.insert(0, parent_dir)
+            importlib.import_module(m)
 
     if args.targets:
         targets = []
@@ -70,10 +91,16 @@ def cmd_list(args):
     if args.config and pathlib.Path(args.config).exists():
         cfg, _, _, _ = load_config(args.config)
         for m in cfg.get("modules", []):
-            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            if parent_dir not in sys.path:
-                sys.path.insert(0, parent_dir)            
-            importlib.import_module(m)
+            # Convert module name to file path (e.g., "examples.rules_anything" -> "examples/rules_anything.py")
+            module_path = m.replace(".", "/") + ".py"
+            if os.path.exists(module_path):
+                import_module_from_path(m, module_path)
+            else:
+                # Fallback to standard import if file doesn't exist
+                parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                if parent_dir not in sys.path:
+                    sys.path.insert(0, parent_dir)            
+                importlib.import_module(m)
     nodes = list_nodes()
     print("# Tasks"); [print("-", n) for n in sorted(nodes["tasks"])]
     print("\n# Checks"); [print("-", n) for n in sorted(nodes["checks"])]
@@ -192,6 +219,7 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] not in {"run","list","init","-h","--help"}:
         sys.argv.insert(1, "run")
 
+    
     args = parser.parse_args()
     if not getattr(args, "func", None):
         parser.print_help(); sys.exit(0)
