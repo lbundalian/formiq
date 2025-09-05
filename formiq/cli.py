@@ -44,6 +44,8 @@ def build_env(env_cfg: Dict[str, Any]):
     return dict(env_cfg)
 
 def cmd_run(args):
+    ## testing
+    # args.config = 'examples/formiq.yml'
     cfg, env_cfg, params, _ = load_config(args.config)
     for m in cfg.get("modules", []):
         # Convert module name to file path (e.g., "examples.rules_anything" -> "examples/rules_anything.py")
@@ -69,6 +71,7 @@ def cmd_run(args):
 
     env = build_env(env_cfg)
     max_workers = env_cfg.get("resources", {}).get("max_workers", os.cpu_count() or 4)
+    nodes = list_nodes()
     runner = Runner(env=env, params=params, workdir=args.workdir, max_workers=max_workers)
     results = runner.run(targets, parallel=args.parallel)
 
@@ -88,7 +91,10 @@ def cmd_run(args):
     sys.exit(1 if failures else 0)
 
 def cmd_list(args):
+    ## testing
+    # args.config = 'examples/formiq.yml'
     if args.config and pathlib.Path(args.config).exists():
+        
         cfg, _, _, _ = load_config(args.config)
         for m in cfg.get("modules", []):
             # Convert module name to file path (e.g., "examples.rules_anything" -> "examples/rules_anything.py")
@@ -214,6 +220,9 @@ def main():
     p_init = sub.add_parser("init", help="Scaffold a minimal Formiq project here")
     p_init.add_argument("-f","--force", action="store_true", help="overwrite existing files")
     p_init.set_defaults(func=cmd_init)
+
+    ## testing
+    # sys.argv.append("run")
 
     # default to run if user types: formiq daily summarize
     if len(sys.argv) > 1 and sys.argv[1] not in {"run","list","init","-h","--help"}:

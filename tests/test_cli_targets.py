@@ -44,3 +44,4 @@ def test_cmd_run_expands_group_targets(tmp_path, monkeypatch):
     assert exc.value.code == 0
     assert FakeRunner.last is not None
     assert FakeRunner.last.called_targets == ["one", "two"]
+

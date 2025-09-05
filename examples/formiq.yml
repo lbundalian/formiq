@@ -1,16 +1,16 @@
 # examples/formiq.yml
 project: formiq_example
-profile: ${FORMIQ_PROFILE:-dev}
+profile: dev
 
 envs:
   dev:
     env_module: examples.sqlalchemy_env
-    db_url: ${DB_URL:-}
-    resources: { max_workers: 8 }
+    db_url: redshift+psycopg2://awsuser:Pg68h2ZHmVjml@redshift-cluster-2.clxqnyeopl7d.us-east-1.redshift.amazonaws.com:5439/db_quibble
+
   prod:
     env_module: examples.sqlalchemy_env
-    db_url: ${DB_URL}
-    resources: { max_workers: 16 }
+    db_url: redshift+psycopg2://awsuser:Pg68h2ZHmVjml@redshift-cluster-2.clxqnyeopl7d.us-east-1.redshift.amazonaws.com:5439/db_quibble
+
 
 params:
   # choose one data source:
@@ -20,7 +20,7 @@ params:
   group_key: id
 
 targets:
-  daily: [build_dataset, summarize, qc_basic, recap]
+  daily: [build_dataset]
 
 modules:
   - examples.rules_anything
